@@ -45,3 +45,4 @@ Route::apiResource('cars', CarController::class);
 Route::apiResource('car_reservation', CarReservationController::class);
 Route::apiResource('room_reservation', RoomReservationController::class);
 Route::post('room_reservation/searchByDate', [RoomReservationController::class, 'searchByDate'])->name('room_reservation.searchByDate');
+Route::get('room_reservation/searchByUserAndDate/{data}', [RoomReservationController::class, 'searchByUserAndDate'])->name('room_reservation.searchByUserAndDate');

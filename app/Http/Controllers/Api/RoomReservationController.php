@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\RoomReservation;
 use App\Repository\RoomReservation\RoomReservationRepoInterface;
 use App\Services\RoomReservation\RoomReservationServiceInterface;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -79,6 +81,15 @@ class RoomReservationController extends BaseController
         try {
             $data = $this->roomReservationRepo->searchByDate($request->date);
             return $this->sendResponse($data, 'Data show by selected date');
+        } catch (Exception $e) {
+            return $this->sendError('Error', $e->getMessage(), 500);
+        }
+    }
+    public function searchByUserAndDate($user_id)
+    {
+        try {
+            $data = $this->roomReservationRepo->searchByUserAndDate($user_id);
+            return $this->sendResponse($data, 'Data show by selected user and date');
         } catch (Exception $e) {
             return $this->sendError('Error', $e->getMessage(), 500);
         }
