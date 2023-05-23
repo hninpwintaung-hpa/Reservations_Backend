@@ -15,4 +15,9 @@ class RoomRepository implements RoomRepoInterface
         $data = Room::where('id', $id)->first();
         return $data;
     }
+
+    public function getRoomCount(){
+        $data = Room::count();
+        return $data;
+    }
 }

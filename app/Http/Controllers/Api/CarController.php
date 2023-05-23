@@ -110,4 +110,13 @@ class CarController extends BaseController
             return $this->sendError('Error', $e->getMessage(), 500);
         }
     }
+
+    public function getCarCount(){
+        try{
+            $data = $this->carRepo->getCarCount();
+            return $this->sendResponse($data, 'Car Count');
+        } catch(Exception $e){
+            return $this->sendError('Error', $e->getMessage(), 500);
+        }
+    }
 }

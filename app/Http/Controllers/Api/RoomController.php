@@ -107,4 +107,15 @@ class RoomController extends BaseController
             return $this->sendError('Error', $e->getMessage(), 500);
         }
     }
+
+    public function getRoomCount(){
+        try{
+            $data = $this->roomRepo->getRoomCount();
+            return $this->sendResponse($data, 'Room Count');
+        } catch(Exception $e){
+            return $this->sendError('Error', $e->getMessage(), 500);
+        }
+    }
+
+    
 }

@@ -9,4 +9,10 @@ class RoomReservation extends Model
 {
     use HasFactory;
     protected $fillable = ['title', 'description', 'start_time', 'end_time',  'date', 'room_id', 'user_id'];
+
+    public function user()
+    {
+        return $this->belognsTo(User::class);
+    }
 }
+

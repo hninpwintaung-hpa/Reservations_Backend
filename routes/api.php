@@ -40,8 +40,18 @@ Route::delete('/users/admin_delete/{id}', [UserController::class, 'adminDelete']
     ->middleware('auth:sanctum');
 
 Route::apiResource('users', UserController::class)->middleware('auth:sanctum');
-Route::apiResource('rooms', RoomController::class);
-Route::apiResource('cars', CarController::class);
-Route::apiResource('car_reservation', CarReservationController::class);
-Route::apiResource('room_reservation', RoomReservationController::class);
-Route::post('room_reservation/searchByDate', [RoomReservationController::class, 'searchByDate'])->name('room_reservation.searchByDate');
+Route::apiResource('rooms', RoomController::class)->middleware('auth:sanctum');
+Route::apiResource('cars', CarController::class)->middleware('auth:sanctum');
+Route::apiResource('car_reservation', CarReservationController::class)->middleware('auth:sanctum');
+Route::apiResource('room_reservation', RoomReservationController::class)->middleware('auth:sanctum');
+Route::post('room_reservation/searchByDate', [RoomReservationController::class, 'searchByDate'])->name('room_reservation.searchByDate')->middleware('auth:sanctum');
+
+Route::get('car_count', [CarController::class, 'getCarCount'])->middleware('auth:sanctum');
+Route::get('room_count', [RoomController::class, 'getRoomCount'])->middleware('auth:sanctum');
+Route::get('car_reserve_count', [CarReservationController::class, 'getCarReserveCount'])->middleware('auth:sanctum');
+Route::get('room_reserve_count', [RoomReservationController::class, 'getRoomReserveCount'])->middleware('auth:sanctum');
+Route::get('room_reserve_count_by_team', [RoomReservationController::class, 'getRoomReserveCountByTeam'])->middleware('auth:sanctum');
+Route::get('car_reserve_count_by_team', [CarReservationController::class, 'getCarReserveCountByTeam'])->middleware('auth:sanctum');
+Route::get('room_reserve_count_by_id/{id}', [RoomReservationController::class, 'getRoomReserveCountById'])->middleware('auth:sanctum');
+Route::get('car_reserve_count_by_id/{id}', [CarReservationController::class, 'getCarReserveCountById'])->middleware('auth:sanctum');
+

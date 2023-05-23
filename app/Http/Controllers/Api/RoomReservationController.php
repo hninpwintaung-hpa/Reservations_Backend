@@ -125,4 +125,32 @@ class RoomReservationController extends BaseController
             return $this->sendError('Error', $e->getMessage(), 500);
         }
     }
+
+    public function getRoomReserveCount(){
+        try{
+            $data = $this->roomReservationRepo->getRoomReserveCount();
+            return $this->sendResponse($data, 'Room Reservation Count');
+        } catch(Exception $e){
+            return $this->sendError('Error', $e->getMessage(), 500);
+        }
+    }
+
+
+    public function getRoomReserveCountByTeam(){
+        try{
+            $data = $this->roomReservationRepo->getRoomReserveCountByTeam();
+            return $this->sendResponse($data, 'Room Reserve Count by Team');
+        } catch(Exception $e){
+            return $this->sendError('Error', $e->getMessage(), 500);
+        }
+    }
+
+    public function getRoomReserveCountById($id){
+        try{
+            $data = $this->roomReservationRepo->getRoomReserveCountById($id);
+            return $this->sendResponse($data, 'Room Count by Id');
+        } catch(Exception $e){
+            return $this->sendError('Error', $e->errorMessage(), 500);
+        }
+    }
 }
