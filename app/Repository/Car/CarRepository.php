@@ -15,4 +15,8 @@ class CarRepository implements CarRepoInterface
         $data = Car::where('id', $id)->first();
         return $data;
     }
+    public function getCarCount(){
+        $data = Car::count();
+        return $data;
+    }
 }

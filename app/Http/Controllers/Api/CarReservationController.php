@@ -115,4 +115,34 @@ class CarReservationController extends BaseController
             return $this->sendError('Error', $e->getMessage(), 500);
         }
     }
+
+    public function getCarReserveCount()
+    {
+        try {
+            $data = $this->carReservationRepo->getCarReserveCount();
+            return $this->sendResponse($data, 'Car Reservation Count');
+        } catch (Exception $e) {
+            return $this->sendError('Error', $e->getMessage(), 500);
+        }
+    }
+
+    public function getCarReserveCountByTeam()
+    {
+        try {
+            $data = $this->carReservationRepo->getCarReserveCountByTeam();
+            return $this->sendResponse($data, 'Car Reserve Count by Team');
+        } catch (Exception $e) {
+            return $this->sendError('Error', $e->getMessage(), 500);
+        }
+    }
+
+    public function getCarReserveCountById($id)
+    {
+        try {
+            $data = $this->carReservationRepo->getCarReserveCountById($id);
+            return $this->sendResponse($data, 'Car Count by Id');
+        } catch (Exception $e) {
+            return $this->sendError('Error', $e->getMessage(), 500);
+        }
+    }
 }

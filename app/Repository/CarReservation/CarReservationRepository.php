@@ -2,6 +2,7 @@
 
 namespace App\Repository\CarReservation;
 
+use App\Models\Team;
 use App\Models\CarReservation;
 
 class CarReservationRepository implements CarReservationRepoInterface
@@ -14,4 +15,25 @@ class CarReservationRepository implements CarReservationRepoInterface
     {
         return CarReservation::where('id', $id)->get();
     }
+
+    public function getCarReserveCount(){
+        return CarReservation::count();
+    }
+
+    public function getCarReserveCountByTeam(){
+        $teamCarReservations = Team::select('teams.id', 'teams.name', \DB::raw('COUNT(car_reservations.id) as car_reservation_count'))
+        ->leftJoin('users', 'users.team_id', '=', 'teams.id')
+        ->leftJoin('car_reservations', 'car_reservations.user_id', '=', 'users.id')
+        ->groupBy('teams.id', 'teams.name')
+        ->get();
+
+    return $teamCarReservations;
+
+    }
+
+    public function getCarReserveCountById($id){
+        $data = count(CarReservation::where('user_id', $id)->get());
+        return $data;
+    }
+
 }

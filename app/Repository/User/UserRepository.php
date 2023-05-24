@@ -6,7 +6,7 @@ use App\Models\User;
 class UserRepository implements UserRepoInterface{
 
     public function get() {
-        $data = User::get();
+        $data = User::with('team')->get();
         return $data;
     }
 
