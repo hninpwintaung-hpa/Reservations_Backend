@@ -167,4 +167,13 @@ class RoomReservationController extends BaseController
             return $this->sendError('Error', $e->getMessage(), 500);
         }
     }
+    public function getRoomReservationCountByMonth()
+    {
+        try {
+            $data = $this->roomReservationRepo->getRoomReservationCountByMonth();
+            return $this->sendResponse($data, 'Room Count by Month');
+        } catch (Exception $e) {
+            return $this->sendError('Error', $e->getMessage(), 500);
+        }
+    }
 }

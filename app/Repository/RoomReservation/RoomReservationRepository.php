@@ -50,4 +50,14 @@ class RoomReservationRepository implements RoomReservationRepoInterface
         $data = count(RoomReservation::where('user_id', $id)->get());
         return $data;
     }
+    public function getRoomReservationCountByMonth()
+    {
+        $currentYear = date('Y');
+        $results = DB::table('room_reservations')
+            ->select(DB::raw('DATE_FORMAT(date, "%m") as month'), DB::raw('COUNT(*) as count'))
+            ->whereYear('date', $currentYear)
+            ->groupBy('month')
+            ->get();
+        return $results;
+    }
 }

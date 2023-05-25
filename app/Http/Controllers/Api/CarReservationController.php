@@ -145,4 +145,13 @@ class CarReservationController extends BaseController
             return $this->sendError('Error', $e->getMessage(), 500);
         }
     }
+    public function getCarReservationCountByMonth()
+    {
+        try {
+            $data = $this->carReservationRepo->getCarReservationCountByMonth();
+            return $this->sendResponse($data, 'Car Reservation Count By Month');
+        } catch (Exception $e) {
+            return $this->sendError('Error', $e->getMessage(), 500);
+        }
+    }
 }

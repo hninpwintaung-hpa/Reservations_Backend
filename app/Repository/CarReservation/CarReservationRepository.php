@@ -4,6 +4,7 @@ namespace App\Repository\CarReservation;
 
 use App\Models\Team;
 use App\Models\CarReservation;
+use Illuminate\Support\Facades\DB;
 
 class CarReservationRepository implements CarReservationRepoInterface
 {
@@ -16,24 +17,35 @@ class CarReservationRepository implements CarReservationRepoInterface
         return CarReservation::where('id', $id)->get();
     }
 
-    public function getCarReserveCount(){
+    public function getCarReserveCount()
+    {
         return CarReservation::count();
     }
 
-    public function getCarReserveCountByTeam(){
+    public function getCarReserveCountByTeam()
+    {
         $teamCarReservations = Team::select('teams.id', 'teams.name', \DB::raw('COUNT(car_reservations.id) as car_reservation_count'))
-        ->leftJoin('users', 'users.team_id', '=', 'teams.id')
-        ->leftJoin('car_reservations', 'car_reservations.user_id', '=', 'users.id')
-        ->groupBy('teams.id', 'teams.name')
-        ->get();
+            ->leftJoin('users', 'users.team_id', '=', 'teams.id')
+            ->leftJoin('car_reservations', 'car_reservations.user_id', '=', 'users.id')
+            ->groupBy('teams.id', 'teams.name')
+            ->get();
 
-    return $teamCarReservations;
-
+        return $teamCarReservations;
     }
 
-    public function getCarReserveCountById($id){
+    public function getCarReserveCountById($id)
+    {
         $data = count(CarReservation::where('user_id', $id)->get());
         return $data;
     }
-
+    public function getCarReservationCountByMonth()
+    {
+        $currentYear = date('Y');
+        $results = DB::table('car_reservations')
+            ->select(DB::raw('DATE_FORMAT(date, "%m") as month'), DB::raw('COUNT(*) as count'))
+            ->whereYear('date', $currentYear)
+            ->groupBy('month')
+            ->get();
+        return $results;
+    }
 }

@@ -11,4 +11,5 @@ interface RoomReservationRepoInterface
     public function getRoomReserveCount();
     public function getRoomReserveCountByTeam();
     public function getRoomReserveCountById($id);
+    public function getRoomReservationCountByMonth();
 }
