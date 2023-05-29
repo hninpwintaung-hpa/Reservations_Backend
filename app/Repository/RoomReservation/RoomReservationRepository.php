@@ -21,14 +21,14 @@ class RoomReservationRepository implements RoomReservationRepoInterface
     }
     public function searchByDate($date)
     {
-        return  RoomReservation::where('date', $date)->get();
+        return  RoomReservation::with(['room', 'user'])->where('date', $date)->get();
     }
-    public function searchByUserAndDate($user_id)
+
+    public function searchByUserAndDate($user_id, $date)
     {
-        $date = Carbon::now()->toDateString();
-        //dd($date);
-        return RoomReservation::where('user_id', $user_id)->where('date', $date)->get();
+        return RoomReservation::with(['room', 'user'])->where('user_id', $user_id)->where('date', $date)->get();
     }
+
     public function getRoomReserveCount()
     {
         return RoomReservation::count();
@@ -36,7 +36,7 @@ class RoomReservationRepository implements RoomReservationRepoInterface
 
     public function getRoomReserveCountByTeam()
     {
-        $teamRoomReservations = Team::select('teams.id', 'teams.name', \DB::raw('COUNT(room_reservations.id) as reservation_count'))
+        $teamRoomReservations = Team::select('teams.id', 'teams.name', DB::raw('COUNT(room_reservations.id) as reservation_count'))
             ->leftJoin('users', 'users.team_id', '=', 'teams.id')
             ->leftJoin('room_reservations', 'room_reservations.user_id', '=', 'users.id')
             ->groupBy('teams.id', 'teams.name')

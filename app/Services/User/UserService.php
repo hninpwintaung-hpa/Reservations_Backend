@@ -2,8 +2,10 @@
 
 namespace App\Services\User;
 
+use App\Mail\WelcomeEmail;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserService implements UserServiceInterface
 {
@@ -31,6 +33,11 @@ class UserService implements UserServiceInterface
     {
 
         $result = User::where('id', $id)->first();
+        $result->assignRole($data['role_id']);
+        if ($data['status'] == 1) {
+            Mail::to($result->email)->send(new WelcomeEmail($result));
+        }
+
         return $result->update($data);
     }
 

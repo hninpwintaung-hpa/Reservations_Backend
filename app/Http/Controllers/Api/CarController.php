@@ -9,6 +9,7 @@ use App\Repository\Car\CarRepository;
 use App\Services\Car\CarServiceInterface;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CarController extends BaseController
@@ -43,6 +44,11 @@ class CarController extends BaseController
     public function store(Request $request)
     {
         try {
+            $user = Auth::user();
+
+            if (!$user->can('car-create new')) {
+                return $this->sendError('Error!', ['error' => 'You do not have permission to create new car'], 403);
+            }
             $input = $request->validate([
                 'brand' => 'required',
                 'licence_no' => 'required|unique:cars,licence_no',
@@ -104,6 +110,12 @@ class CarController extends BaseController
     public function destroy($id)
     {
         try {
+            $user = Auth::user();
+            // dd($user);
+
+            if (!$user->can('car-delete')) {
+                return $this->sendError('Error!', ['error' => 'You do not have permission to delete car'], 403);
+            }
             $data = $this->carService->delete($id);
             return $this->sendResponse($data, 'Deleted successfully.');
         } catch (Exception $e) {
@@ -111,11 +123,12 @@ class CarController extends BaseController
         }
     }
 
-    public function getCarCount(){
-        try{
+    public function getCarCount()
+    {
+        try {
             $data = $this->carRepo->getCarCount();
             return $this->sendResponse($data, 'Car Count');
-        } catch(Exception $e){
+        } catch (Exception $e) {
             return $this->sendError('Error', $e->getMessage(), 500);
         }
     }

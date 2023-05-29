@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Repository\Team\TeamRepoInterface;
 use App\Services\Team\TeamServiceInterface;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class TeamController extends BaseController
 {
@@ -42,6 +43,10 @@ class TeamController extends BaseController
     public function store(TeamRequest $request)
     {
         try {
+            $user = Auth::user();
+            if (!$user->can('team-create')) {
+                return $this->sendError('Error!', ['error' => 'You do not have permission to create new team'], 403);
+            }
             $data = $this->teamService->store($request->validated());
             return $this->sendResponse($data, 'Successfully register new team.');
         } catch (Exception $e) {
@@ -75,6 +80,11 @@ class TeamController extends BaseController
     public function update(TeamRequest $request, $id)
     {
         try {
+            $user = Auth::user();
+
+            if (!$user->can('team-update')) {
+                return $this->sendError('Error!', ['error' => 'You do not have permission to update team'], 403);
+            }
             $data = $this->teamService->update($request->validated(), $id);
             return $this->sendResponse($data, 'Successfully updated selected team.');
         } catch (Exception $e) {
@@ -91,6 +101,10 @@ class TeamController extends BaseController
     public function destroy($id)
     {
         try {
+            $user = Auth::user();
+            if (!$user->can('team-delete')) {
+                return $this->sendError('Error!', ['error' => 'You do not have permission to delete team'], 403);
+            }
             $data = $this->teamService->destroy($id);
             return $this->sendResponse($data, 'Successfully deleted selected team.');
         } catch (Exception $e) {

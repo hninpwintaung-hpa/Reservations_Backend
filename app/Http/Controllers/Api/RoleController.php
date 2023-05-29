@@ -92,7 +92,7 @@ class RoleController extends BaseController
     {
         try {
             $data = $this->roleService->destroy($id);
-            return $this->sendResponse($data, 'Successfully deleted the  selected role.');
+            return $this->sendResponse($data, 'Successfully deleted the selected role.');
         } catch (Exception $e) {
             return $this->sendError('Error!', $e->getMessage(), 500);
         }

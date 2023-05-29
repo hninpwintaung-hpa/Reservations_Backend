@@ -7,7 +7,7 @@ interface RoomReservationRepoInterface
     public function get();
     public function show($id);
     public function searchByDate($date);
-    public function searchByUserAndDate($id);
+    public function searchByUserAndDate($id, $date);
     public function getRoomReserveCount();
     public function getRoomReserveCountByTeam();
     public function getRoomReserveCountById($id);

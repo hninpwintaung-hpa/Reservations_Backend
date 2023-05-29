@@ -31,8 +31,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
-Route::apiResource('teams', TeamController::class);
-// Route::apiResource('teams', TeamController::class)->middleware('auth:sanctum');
+Route::apiResource('teams', TeamController::class)->middleware('auth:sanctum');
 Route::apiResource('roles', RoleController::class)->middleware('auth:sanctum');
 Route::delete('/users/user_delete/{id}', [UserController::class, 'userDelete'])
     ->middleware('auth:sanctum');
@@ -40,16 +39,22 @@ Route::delete('/users/user_delete/{id}', [UserController::class, 'userDelete'])
 Route::delete('/users/admin_delete/{id}', [UserController::class, 'adminDelete'])
     ->middleware('auth:sanctum');
 
+Route::patch('status_change/{id}', [UserController::class, 'statusChange'])->middleware(('auth:sanctum'));
+
 Route::apiResource('users', UserController::class)->middleware('auth:sanctum');
-Route::apiResource('rooms', RoomController::class);
-Route::apiResource('cars', CarController::class);
-Route::apiResource('car_reservation', CarReservationController::class);
-Route::apiResource('room_reservation', RoomReservationController::class);
-Route::post('room_reservation/searchByDate', [RoomReservationController::class, 'searchByDate'])->name('room_reservation.searchByDate')->middleware('auth:sanctum');
-Route::get('room_reservation/searchByUserAndDate/{data}', [RoomReservationController::class, 'searchByUserAndDate'])->name('room_reservation.searchByUserAndDate')->middleware('auth:sanctum');
 Route::apiResource('rooms', RoomController::class)->middleware('auth:sanctum');
 Route::apiResource('cars', CarController::class)->middleware('auth:sanctum');
 Route::apiResource('car_reservation', CarReservationController::class)->middleware('auth:sanctum');
+Route::apiResource('room_reservation', RoomReservationController::class)->middleware('auth:sanctum');
+
+Route::get('pro_user', [UserController::class, 'getProUser']);
+Route::get('staff', [UserController::class, 'getStaff']);
+Route::post('room_reservation/searchByDate', [RoomReservationController::class, 'searchByDate'])->name('room_reservation.searchByDate')->middleware('auth:sanctum');
+
+
+Route::post('room_reservation/searchByDate', [RoomReservationController::class, 'searchByDate'])->name('room_reservation.searchByDate')->middleware('auth:sanctum');
+Route::get('room_reservation/searchByUserAndDate/{id}/{date}', [RoomReservationController::class, 'searchByUserAndDate'])->name('room_reservation.searchByUserAndDate')->middleware('auth:sanctum');
+
 
 Route::get('car_count', [CarController::class, 'getCarCount'])->middleware('auth:sanctum');
 Route::get('room_count', [RoomController::class, 'getRoomCount'])->middleware('auth:sanctum');

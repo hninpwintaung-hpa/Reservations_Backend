@@ -16,13 +16,13 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
-         $superAdmin = User::create(
+        $superAdmin = User::create(
             [
-                'name' => 'user1',
-                'email' => 'user1@gmail.com',
-                'employee_id' => '123456',
-                'password' => Hash::make('user112345'),
-                'phone' => '09740883309',
+                'name' => 'superadmin',
+                'email' => 'superadmin@gmail.com',
+                'employee_id' => 'ACE-001',
+                'password' => Hash::make('superadmin12345'),
+                'phone' => '09777666888',
                 'status' => '1',
                 'team_id' => '1',
             ]
@@ -30,11 +30,11 @@ class AdminSeeder extends Seeder
 
         $admin = User::create(
             [
-                'name' => 'user2',
-                'email' => 'user2@gmail.com',
-                'employee_id' => '223456',
-                'password' => Hash::make('user212345'),
-                'phone' => '09740883308',
+                'name' => 'admin',
+                'email' => 'admin@gmail.com',
+                'employee_id' => 'ACE-002',
+                'password' => Hash::make('admin12345'),
+                'phone' => '09777666887',
                 'status' => '1',
                 'team_id' => '1',
             ]
@@ -43,18 +43,66 @@ class AdminSeeder extends Seeder
 
         $staff = User::create(
             [
-                'name' => 'user3',
-                'email' => 'user3@gmail.com',
-                'employee_id' => '323456',
+                'name' => 'staff',
+                'email' => 'staff@gmail.com',
+                'employee_id' => 'ACE-005',
                 'password' => Hash::make('user312345'),
-                'phone' => '09740883300',
+                'phone' => '09777666777',
                 'status' => '1',
                 'team_id' => '2',
             ]
         );
 
+        $staff1 = User::create(
+            [
+                'name' => 'Hnin Pwint Aung',
+                'email' => 'hninpwintaung001@gmail.com',
+                'employee_id' => '00156',
+                'password' => Hash::make('hnin12345'),
+                'phone' => '0973463240',
+                'status' => '0',
+                'team_id' => '2',
+            ]
+        );
+        $staff2 = User::create(
+            [
+                'name' => 'Aye Thandar Aung',
+                'email' => 'ayethandaraung129@gmail.com',
+                'employee_id' => '00157',
+                'password' => Hash::make('aye12345'),
+                'phone' => '0974089300',
+                'status' => '0',
+                'team_id' => '1',
+            ]
+        );
+        $staff3 = User::create(
+            [
+                'name' => 'Myat Phyoe Phyoe Ei',
+                'email' => 'hydra5581@gmail.com',
+                'employee_id' => '00158',
+                'password' => Hash::make('myat12345'),
+                'phone' => '09743300',
+                'status' => '0',
+                'team_id' => '1',
+            ]
+        );
+        $staff4 = User::create(
+            [
+                'name' => 'Aung Aung',
+                'email' => 'yethwaykhant.it@gmail.com',
+                'employee_id' => '00159',
+                'password' => Hash::make('aung12345'),
+                'phone' => '0974083300',
+                'status' => '0',
+                'team_id' => '1',
+            ]
+        );
         $superAdmin->assignRole('SuperAdmin');
         $admin->assignRole('Admin');
         $staff->assignRole('Staff');
+        $staff1->assignRole('Staff');
+        $staff2->assignRole('Staff');
+        $staff3->assignRole('Staff');
+        $staff4->assignRole('Staff');
     }
 }

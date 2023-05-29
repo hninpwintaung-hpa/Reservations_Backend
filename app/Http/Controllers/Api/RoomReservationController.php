@@ -79,16 +79,17 @@ class RoomReservationController extends BaseController
     public function searchByDate(Request $request)
     {
         try {
+
             $data = $this->roomReservationRepo->searchByDate($request->date);
             return $this->sendResponse($data, 'Data show by selected date');
         } catch (Exception $e) {
             return $this->sendError('Error', $e->getMessage(), 500);
         }
     }
-    public function searchByUserAndDate($user_id)
+    public function searchByUserAndDate(Request $request, $user_id)
     {
         try {
-            $data = $this->roomReservationRepo->searchByUserAndDate($user_id);
+            $data = $this->roomReservationRepo->searchByUserAndDate($user_id, $request->date);
             return $this->sendResponse($data, 'Data show by selected user and date');
         } catch (Exception $e) {
             return $this->sendError('Error', $e->getMessage(), 500);

@@ -7,6 +7,7 @@ use App\Repository\Room\RoomRepoInterface;
 use App\Services\Room\RoomServiceInterface;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RoomController extends BaseController
 {
@@ -40,6 +41,11 @@ class RoomController extends BaseController
     public function store(Request $request)
     {
         try {
+            $user = Auth::user();
+
+            if (!$user->can('room-store')) {
+                return $this->sendError('Error!', ['error' => 'You do not have permission to create new room'], 403);
+            }
             $input = $request->validate([
                 'name' => 'required',
                 'capacity' => 'required',
@@ -79,6 +85,11 @@ class RoomController extends BaseController
     public function update(Request $request, $id)
     {
         try {
+            $user = Auth::user();
+
+            if (!$user->can('room-update')) {
+                return $this->sendError('Error!', ['error' => 'You do not have permission to update room'], 403);
+            }
             $input = $request->validate([
                 'name' => 'required',
                 'capacity' => 'required',
@@ -101,6 +112,11 @@ class RoomController extends BaseController
     public function destroy($id)
     {
         try {
+            $user = Auth::user();
+
+            if (!$user->can('room-delete')) {
+                return $this->sendError('Error!', ['error' => 'You do not have permission to delete room'], 403);
+            }
             $data = $this->roomService->delete($id);
             return $this->sendResponse($data, 'Deleted successfully.');
         } catch (Exception $e) {
@@ -108,14 +124,13 @@ class RoomController extends BaseController
         }
     }
 
-    public function getRoomCount(){
-        try{
+    public function getRoomCount()
+    {
+        try {
             $data = $this->roomRepo->getRoomCount();
             return $this->sendResponse($data, 'Room Count');
-        } catch(Exception $e){
+        } catch (Exception $e) {
             return $this->sendError('Error', $e->getMessage(), 500);
         }
     }
-
-    
 }

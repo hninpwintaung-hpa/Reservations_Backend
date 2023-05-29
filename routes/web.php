@@ -1,5 +1,8 @@
 <?php
 
+use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*

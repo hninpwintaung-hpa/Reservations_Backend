@@ -61,60 +61,13 @@ class AuthController extends BaseController
             $success['name'] = $user->name;
 
             return $this->sendResponse($success, 'User Register successfully.');
-
-            // return response()->json([
-            //     'status' => true,
-            //     'message' => 'User Created Successfully',
-            //     'token' => $user->createToken("API TOKEN")->plainTextToken
-            // ], 200);
-
         } catch (\Throwable $th) {
             return $this->sendError('Registration Fail!.', $th->getMessage(), 500);
-
-            // return response()->json([
-            //     'status' => false,
-            //     'message' => $th->getMessage()
-            // ], 500);
         }
     }
 
     public function login(Request $request)
     {
-        // try {
-        //     $validateUser = Validator::make(
-        //         $request->all(),
-        //         [
-        //             'email' => 'required|email',
-        //             'password' => 'required'
-        //         ]
-        //     );
-        //     if ($validateUser->fails()) {
-        //         return $this->sendError('Validation error.', ['error' => 'unathorised'], 404);
-        //     }
-        //     if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-        //         $user = Auth::user();
-        //         $user = User::where('email', $request->email)->first();
-        //         $success['token'] = $user->createToken('MyApp')->plainTextToken;
-        //         $success['name'] = $user->name;
-        //         $success['user'] = $user;
-        //         $success['role'] = $user->getRoleNames()->first();
-
-
-        //         // $success['email'] = $user->email;
-        //         // $success['id'] = $user->id;
-
-        //         return $this->sendResponse($success, 'User Login successfully.');
-        //     } else {
-        //         return $this->sendError('Unauthorised.', ['error' => 'Email & Password does not match with our record.'], 403);
-        //     }
-        // } catch (\Throwable $th) {
-        //     return $this->sendError('Server Error.',  $th->getMessage(), 405);
-
-        //     // return response()->json([
-        //     //     'status' => false,
-        //     //     'message' => $th->getMessage()
-        //     // ], 500);
-        // }
 
         try {
             $validateUser = Validator::make(
@@ -138,6 +91,12 @@ class AuthController extends BaseController
 
             $user = User::where('email', $request->email)->first();
 
+            if ($user['status'] == 0) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Not available! Please wait for admin approve',
+                ], 401);
+            }
             return response()->json([
                 'status' => true,
                 'message' => 'User Logged In Successfully',
