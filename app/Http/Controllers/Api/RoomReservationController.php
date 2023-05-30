@@ -9,6 +9,7 @@ use App\Services\RoomReservation\RoomReservationServiceInterface;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class RoomReservationController extends BaseController
 {
@@ -105,12 +106,13 @@ class RoomReservationController extends BaseController
     public function update(Request $request, $id)
     {
         try {
+
             $input = $request->validate([
                 'user_id' => 'required',
                 'title' => 'required',
                 'description' => 'required',
-                'start_time' => 'required',
-                'end_time' => 'required|after:start_time',
+                'start_time' => 'nullable',
+                'end_time' => 'nullable|after:start_time',
                 'date' => 'required',
                 'room_id' => 'required',
             ]);

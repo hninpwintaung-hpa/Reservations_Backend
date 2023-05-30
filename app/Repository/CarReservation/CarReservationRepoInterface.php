@@ -10,4 +10,5 @@ interface CarReservationRepoInterface
     public function getCarReserveCountByTeam();
     public function getCarReserveCountById($id);
     public function getCarReservationCountByMonth();
+    public function getCarReservationSearchByDate($date);
 }

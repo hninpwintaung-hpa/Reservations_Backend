@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CarReservationController;
 use App\Http\Controllers\Api\RoomReservationController;
+use App\Models\CarReservation;
 use App\Models\RoomReservation;
 
 /*
@@ -65,5 +66,6 @@ Route::get('car_reserve_count_by_team', [CarReservationController::class, 'getCa
 Route::get('room_reserve_count_by_id/{id}', [RoomReservationController::class, 'getRoomReserveCountById'])->middleware('auth:sanctum');
 Route::get('car_reserve_count_by_id/{id}', [CarReservationController::class, 'getCarReserveCountById'])->middleware('auth:sanctum');
 
-Route::get('room_reserve_count_by_month', [RoomReservationController::class, 'getRoomReservationCountByMonth'])->middleware('auth:sanctum');;
-Route::get('car_reserve_count_by_month', [CarReservationController::class, 'getCarReservationCountByMonth'])->middleware('auth:sanctum');;
+Route::get('room_reserve_count_by_month', [RoomReservationController::class, 'getRoomReservationCountByMonth'])->middleware('auth:sanctum');
+Route::get('car_reserve_count_by_month', [CarReservationController::class, 'getCarReservationCountByMonth'])->middleware('auth:sanctum');
+Route::get('getCarReservationSearchByDate/{date}', [CarReservationController::class, 'getCarReservationSearchByDate'])->middleware('auth:sanctum');

@@ -12,6 +12,10 @@ class CarReservation extends Model
 
     public function user()
     {
-        return $this->belognsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id')->with('team');
+    }
+    public function car()
+    {
+        return $this->belongsTo(Car::class);
     }
 }

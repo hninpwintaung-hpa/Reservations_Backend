@@ -64,7 +64,7 @@ class RoomReservationService implements RoomReservationServiceInterface
             $inputRoom = $data['room_id'];
             foreach ($reservations as $reservation) {
 
-                $overlap = $this->checkRoomReservationOverlap($inputStartTime, $inputEndTime, $inputDate, $inputRoom);
+                $overlap = $this->checkRoomReservationUpdateOverlap($id, $inputStartTime, $inputEndTime, $inputDate, $inputRoom);
 
                 if ($overlap) {
                     return "Unable to make reservation within that time";
@@ -105,10 +105,47 @@ class RoomReservationService implements RoomReservationServiceInterface
             'room_id' => $data['room_id'],
         ]);
     }
-
     public function checkRoomReservationOverlap($inputStartTime, $inputEndTime, $inputDate, $inputRoom)
     {
         $overlap = RoomReservation::where('room_id', $inputRoom)->where('date', '=', $inputDate)->where(function ($query) use ($inputStartTime, $inputEndTime) {
+            $query->where(function ($query) use ($inputStartTime, $inputEndTime) {
+                $query->where('start_time', '>=', $inputEndTime)
+                    ->where('end_time', '<=', $inputStartTime);
+            })
+                ->orWhere(function ($query) use ($inputStartTime, $inputEndTime) {
+                    $query->where('start_time', '<', $inputStartTime)
+                        ->where('end_time', '>', $inputEndTime);
+                })
+                ->orWhere(function ($query) use ($inputStartTime, $inputEndTime) {
+                    $query->where('start_time', '>', $inputStartTime)
+                        ->where('end_time', '<', $inputEndTime);
+                })
+                ->orWhere(function ($query) use ($inputStartTime, $inputEndTime) {
+                    $query->where('start_time', '<', $inputStartTime)
+                        ->where('end_time', '=', $inputEndTime);
+                })
+                ->orWhere(function ($query) use ($inputStartTime, $inputEndTime) {
+                    $query->where('start_time', '>', $inputStartTime)
+                        ->where('start_time', '<', $inputEndTime);
+                })
+                ->orWhere(function ($query) use ($inputStartTime, $inputEndTime) {
+                    $query->where('start_time', '=', $inputStartTime)
+                        ->where('start_time', '<=', $inputEndTime);
+                })
+                ->orWhere(function ($query) use ($inputStartTime, $inputEndTime) {
+                    $query->where('end_time', '>', $inputStartTime)
+                        ->where('end_time', '<', $inputEndTime);
+                })
+                ->orWhere(function ($query) use ($inputStartTime, $inputEndTime) {
+                    $query->where('end_time', '>=', $inputStartTime)
+                        ->where('end_time', '=', $inputEndTime);
+                });
+        })->exists();
+        return $overlap;
+    }
+    public function checkRoomReservationUpdateOverlap($id, $inputStartTime, $inputEndTime, $inputDate, $inputRoom)
+    {
+        $overlap = RoomReservation::where('id', '<>', $id)->where('room_id', $inputRoom)->where('date', '=', $inputDate)->where(function ($query) use ($inputStartTime, $inputEndTime) {
             $query->where(function ($query) use ($inputStartTime, $inputEndTime) {
                 $query->where('start_time', '>=', $inputEndTime)
                     ->where('end_time', '<=', $inputStartTime);

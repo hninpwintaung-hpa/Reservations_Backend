@@ -13,7 +13,7 @@ class RoomReservationRepository implements RoomReservationRepoInterface
 {
     public function get()
     {
-        return RoomReservation::all();
+        return RoomReservation::with(['user', 'room'])->get();
     }
     public function show($id)
     {

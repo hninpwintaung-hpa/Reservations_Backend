@@ -154,4 +154,13 @@ class CarReservationController extends BaseController
             return $this->sendError('Error', $e->getMessage(), 500);
         }
     }
+    public function getCarReservationSearchByDate($date)
+    {
+        try {
+            $data = $this->carReservationRepo->getCarReservationSearchByDate($date);
+            return $this->sendResponse($data, 'Lists of car reservation from current date');
+        } catch (Exception $e) {
+            return $this->sendError('Error', $e->getMessage(), 500);
+        }
+    }
 }
