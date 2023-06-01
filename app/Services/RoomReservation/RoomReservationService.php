@@ -14,36 +14,47 @@ class RoomReservationService implements RoomReservationServiceInterface
 {
     public function store($data)
     {
+
         $currentDateTime = Carbon::now();
+
         $inputDate = Carbon::parse($data['date']);
         $inputTime = Carbon::parse($data['start_time']);
-        $currentTime = Carbon::now()->format('h:i A');
+        $currentTime = Carbon::now();
+        $currentTime->setTimezone('Asia/Yangon');
+        $formattedTime = $currentTime->format('H:i:s');
+        $formattedInput = $inputTime->format('H:i:s');
 
-        if ($inputDate >= $currentDateTime || $inputTime >= $currentTime) {
-            if ($data['room_id'] != null && isset($data['room_id'])) {
 
-                $reservations = RoomReservation::all();
-                $inputStartTime = $data['start_time'];
-                $inputEndTime = $data['end_time'];
+        if ($inputDate > $currentDateTime ||  $formattedInput >= $formattedTime) {
+            // dd($inputDate);
+            if ($data['start_time'] < $data['end_time']) {
+                if ($data['room_id'] != null && isset($data['room_id'])) {
 
-                $inputRoom = $data['room_id'];
-                if (!empty($reservations)) {
-                    foreach ($reservations as $reservation) {
-                        $overlap = $this->checkRoomReservationOverlap($inputStartTime, $inputEndTime, $inputDate, $inputRoom);
+                    $reservations = RoomReservation::all();
+                    $inputStartTime = $data['start_time'];
+                    $inputEndTime = $data['end_time'];
 
-                        if ($overlap) {
-                            //return response()->json(['error' => 'Unable to make reservation during that time.'], 500);
-                            return "Unable to make reservation withing that time";
-                            exit();
-                        } else {
-                            return $this->makeRoomReservation($data);
+                    $inputRoom = $data['room_id'];
+                    if (!empty($reservations)) {
+
+                        foreach ($reservations as $reservation) {
+                            $overlap = $this->checkRoomReservationOverlap($inputStartTime, $inputEndTime, $inputDate, $inputRoom);
+
+                            if ($overlap) {
+                                return "overlap";
+                            } else {
+
+                                return $this->makeRoomReservation($data);
+                            }
                         }
                     }
+                    return $this->makeRoomReservation($data);
                 }
-                return $this->makeRoomReservation($data);
+            } else {
+                return "endTimeError";
             }
         } else {
-            return "Error in your selected date time";
+            return "errorDate";
         }
     }
 
@@ -57,6 +68,7 @@ class RoomReservationService implements RoomReservationServiceInterface
 
 
         if ($inputDate >= $currentDateTime || $data['start_time'] > $currentTime) {
+            // if ($data['start_time'] < $data['end_time']) {
             $reservations = RoomReservation::all();
             $inputStartTime = $data['start_time'];
             $inputEndTime = $data['end_time'];
@@ -67,8 +79,7 @@ class RoomReservationService implements RoomReservationServiceInterface
                 $overlap = $this->checkRoomReservationUpdateOverlap($id, $inputStartTime, $inputEndTime, $inputDate, $inputRoom);
 
                 if ($overlap) {
-                    return "Unable to make reservation within that time";
-                    exit();
+                    return "overlap";
                 } else {
                     return $result->update([
                         'title' => $data['title'],
@@ -82,7 +93,7 @@ class RoomReservationService implements RoomReservationServiceInterface
                 }
             }
         } else {
-            return "Error in your input .";
+            return "errorDate";
         }
     }
 
@@ -107,7 +118,7 @@ class RoomReservationService implements RoomReservationServiceInterface
     }
     public function checkRoomReservationOverlap($inputStartTime, $inputEndTime, $inputDate, $inputRoom)
     {
-        $overlap = RoomReservation::where('room_id', $inputRoom)->where('date', '=', $inputDate)->where(function ($query) use ($inputStartTime, $inputEndTime) {
+        $overlap = RoomReservation::where('date', '=', $inputDate)->where(function ($query) use ($inputStartTime, $inputEndTime) {
             $query->where(function ($query) use ($inputStartTime, $inputEndTime) {
                 $query->where('start_time', '>=', $inputEndTime)
                     ->where('end_time', '<=', $inputStartTime);

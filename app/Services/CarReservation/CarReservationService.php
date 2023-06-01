@@ -12,26 +12,32 @@ class CarReservationService implements CarReservationServiceInterface
         $currentDateTime = Carbon::now();
         $inputDate = Carbon::parse($data['date']);
         $inputTime = Carbon::parse($data['start_time']);
-        $currentTime = Carbon::now()->format('h:i A');
+        $currentTime = Carbon::now();
+        $currentTime->setTimezone('Asia/Yangon');
+        $formattedTime = $currentTime->format('H:i:s');
+        $formattedInput = $inputTime->format('H:i:s');
 
         if ($inputDate >= $currentDateTime || $inputTime >= $currentTime) {
-            if ($data['car_id'] != null && isset($data['car_id'])) {
-                $inputCar = $data['car_id'];
+            if ($data['start_time'] < $data['end_time']) {
+                if ($data['car_id'] != null && isset($data['car_id'])) {
+                    $inputCar = $data['car_id'];
 
-                $existingReservation = CarReservation::all();
-                $inputStartTime = $data['start_time'];
-                $inputEndTime = $data['end_time'];
-                foreach ($existingReservation as $reservation) {
-                    $overlap = $this->checkCarReservationOverlap($inputStartTime, $inputEndTime, $inputDate, $inputCar);
-                    if ($overlap) {
-                        return "Unable to make reservation within that time.";
-                        exit();
+                    $existingReservation = CarReservation::all();
+                    $inputStartTime = $data['start_time'];
+                    $inputEndTime = $data['end_time'];
+                    foreach ($existingReservation as $reservation) {
+                        $overlap = $this->checkCarReservationOverlap($inputStartTime, $inputEndTime, $inputDate, $inputCar);
+                        if ($overlap) {
+                            return "overlap";
+                        }
                     }
+                    return CarReservation::create($data);
                 }
-                return CarReservation::create($data);
+            } else {
+                return "endTimeError";
             }
         } else {
-            return "Please select the date greater than current date.";
+            return "errorDate";
         }
     }
     public function checkCarReservationOverlap($inputStartTime, $inputEndTime, $inputDate, $inputCar)

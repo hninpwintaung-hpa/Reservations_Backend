@@ -32,7 +32,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
-Route::apiResource('teams', TeamController::class)->middleware('auth:sanctum');
+Route::post('teams', [TeamController::class, 'store'])->middleware('auth:sanctum');
+Route::get('teams', [TeamController::class, 'index']);
+Route::patch('teams/{id}', [TeamController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('teams/{id}', [TeamController::class, 'destroy'])->middleware('auth:sanctum');
+
 Route::apiResource('roles', RoleController::class)->middleware('auth:sanctum');
 Route::delete('/users/user_delete/{id}', [UserController::class, 'userDelete'])
     ->middleware('auth:sanctum');
@@ -40,7 +44,7 @@ Route::delete('/users/user_delete/{id}', [UserController::class, 'userDelete'])
 Route::delete('/users/admin_delete/{id}', [UserController::class, 'adminDelete'])
     ->middleware('auth:sanctum');
 
-Route::patch('status_change/{id}', [UserController::class, 'statusChange'])->middleware(('auth:sanctum'));
+Route::patch('status_change/{id}', [UserController::class, 'statusChange'])->middleware('auth:sanctum');
 
 Route::apiResource('users', UserController::class)->middleware('auth:sanctum');
 Route::apiResource('rooms', RoomController::class)->middleware('auth:sanctum');

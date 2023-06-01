@@ -7,6 +7,7 @@ use App\Repository\CarReservation\CarReservationRepoInterface;
 use App\Services\CarReservation\CarReservationServiceInterface;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CarReservationController extends BaseController
 {
@@ -40,7 +41,7 @@ class CarReservationController extends BaseController
     public function store(Request $request)
     {
         try {
-            $input = $request->validate([
+            $validateReservation = Validator::make($request->all(), [
                 'title' => 'required',
                 'start_time' => 'required',
                 'end_time' => 'required',
@@ -50,10 +51,25 @@ class CarReservationController extends BaseController
                 'user_id' => 'required',
                 'car_id' => 'required',
             ]);
-            $data = $this->carReservationService->store($input);
-            return $this->sendResponse($data, 'Created  Reservation successfully.');
+
+            if ($validateReservation->fails()) {
+                return $this->sendError($validateReservation->errors(), "Validation Error", 405);
+            }
+
+            $reservation = $this->carReservationService->store($request->all());
+
+            if ($reservation == "overlap") {
+                return $this->sendError(['overlap' => 'Reservation already exists within that time!'], "Validation Error", 405);
+            }
+            if ($reservation == "errorDate") {
+                return $this->sendError(['errorDate' => 'Please select the time greater than current date time!'], "Validation Error", 405);
+            }
+            if ($reservation == "endTimeError") {
+                return $this->sendError(['endTimeError' => 'The start time must be less than end time!'], "Validation Error", 405);
+            }
+            return $this->sendResponse($reservation, 'Created  Reservation successfully.');
         } catch (Exception $e) {
-            return $this->sendError('Error', $e->getMessage(), 500);
+            return $this->sendError($e->getMessage(), 'Error', 500);
         }
     }
 
@@ -91,6 +107,7 @@ class CarReservationController extends BaseController
                 'destination' => 'required',
                 'no_of_traveller' => 'required',
                 'user_id' => 'required',
+                'status' => 'nullable',
                 'car_id' => 'required',
             ]);
             $data = $this->carReservationService->update($input, $id);

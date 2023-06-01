@@ -26,7 +26,8 @@ class UserRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|confirmed',
+            'password' => 'required|min:6|max:255|confirmed',
+            'password_confirmation' => 'required',
             'status' => 'nullable',
             'team_id' => 'required',
             'role_id' => 'required',

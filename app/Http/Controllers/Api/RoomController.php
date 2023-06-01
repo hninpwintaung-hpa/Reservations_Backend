@@ -43,7 +43,7 @@ class RoomController extends BaseController
         try {
             $user = Auth::user();
 
-            if (!$user->can('room-store')) {
+            if (!$user->can('room-create')) {
                 return $this->sendError('Error!', ['error' => 'You do not have permission to create new room'], 403);
             }
             $input = $request->validate([

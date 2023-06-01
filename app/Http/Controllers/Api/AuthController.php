@@ -36,7 +36,8 @@ class AuthController extends BaseController
                     'email' => 'required|email|unique:users,email',
                     'employee_id' => 'required|unique:users,employee_id',
                     'phone' => 'required|unique:users,phone',
-                    'password' => 'required',
+                    'password' => 'required|min:6|confirmed',
+                    'password_confirmation' => 'required',
                     'status' => 'required',
                     'role_id' => 'required',
                     'team_id' => 'required',
@@ -44,7 +45,7 @@ class AuthController extends BaseController
             );
 
             if ($validateUser->fails()) {
-                return $this->sendError('Validation Error.', $validateUser->errors(), 403);
+                return $this->sendError($validateUser->errors(), "Validation Error", 403);
             }
 
             $user = User::create([
@@ -79,14 +80,11 @@ class AuthController extends BaseController
             );
 
             if ($validateUser->fails()) {
-                return $this->sendError('Validation error.', ['error' => 'unathorised']);
+                return $this->sendError($validateUser->errors(), ['error' => 'unathorized']);
             }
 
             if (!Auth::attempt($request->only(['email', 'password']))) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Email & Password does not match with our record.',
-                ], 401);
+                return $this->sendError(['error' => 'Email & Password does not match with our record.'], ['error' => 'unathorized']);
             }
 
             $user = User::where('email', $request->email)->first();

@@ -9,10 +9,16 @@
 </head>
 
 <body>
-    <h1>Welcome to Our Reservation System</h1>
-    <p>Hello, {{ $user->name }}!</p>
-    <p>We have received your request for processing our reservation systems. We have accepted you, so you can login
-        using the link below. http://localhost:5174/login .</p>
+    <h2>Welcome to our Reservation System.</h2>
+    <p>Hello, {{ $user->name }},</p>
+    <p>Thank you for registering with us.</p>
+    <p>Your account has been approved by the admin. You can now log in to the system using your
+        credentials.</p>
+    <br>
+    <br>
+
+    <p>Best Regards,</p>
+    <p>Admin Team</p>
 </body>
 
 </html>

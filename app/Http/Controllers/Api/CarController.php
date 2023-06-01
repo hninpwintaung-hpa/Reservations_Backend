@@ -46,7 +46,7 @@ class CarController extends BaseController
         try {
             $user = Auth::user();
 
-            if (!$user->can('car-create new')) {
+            if (!$user->can('car-create')) {
                 return $this->sendError('Error!', ['error' => 'You do not have permission to create new car'], 403);
             }
             $input = $request->validate([

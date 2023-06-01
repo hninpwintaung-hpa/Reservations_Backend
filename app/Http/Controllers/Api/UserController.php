@@ -13,6 +13,7 @@ use App\Repository\User\UserRepoInterface;
 use App\Services\User\UserServiceInterface;
 use Exception;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends BaseController
 {
@@ -303,10 +304,23 @@ class UserController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(Request $request)
     {
         try {
-            $data = $this->userService->store($request->validated());
+            $validator = Validator::make($request->all(), [
+                'name' => 'required',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:6|confirmed',
+                'password_confirmation' => 'required',
+                'status' => 'nullable',
+                'team_id' => 'required',
+                'role_id' => 'required',
+            ]);
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors(),
+            ], 403);
+            $data = $this->userService->store($request->all());
             return response()->json([
                 'status' => 'success',
                 'message' => 'New user store',
