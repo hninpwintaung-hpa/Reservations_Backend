@@ -17,21 +17,27 @@ class CarReservationService implements CarReservationServiceInterface
         $formattedTime = $currentTime->format('H:i:s');
         $formattedInput = $inputTime->format('H:i:s');
 
-        if ($inputDate >= $currentDateTime || $inputTime >= $currentTime) {
+        $car = CarReservation::with('car')->where('car_id', $data['car_id'])->get();
+
+        if ($inputDate > $currentDateTime || $formattedInput >= $formattedTime) {
             if ($data['start_time'] < $data['end_time']) {
                 if ($data['car_id'] != null && isset($data['car_id'])) {
-                    $inputCar = $data['car_id'];
+                    if ($data['no_of_traveller'] <= $car[0]->car->capacity) {
+                        $inputCar = $data['car_id'];
 
-                    $existingReservation = CarReservation::all();
-                    $inputStartTime = $data['start_time'];
-                    $inputEndTime = $data['end_time'];
-                    foreach ($existingReservation as $reservation) {
-                        $overlap = $this->checkCarReservationOverlap($inputStartTime, $inputEndTime, $inputDate, $inputCar);
-                        if ($overlap) {
-                            return "overlap";
+                        $existingReservation = CarReservation::all();
+                        $inputStartTime = $data['start_time'];
+                        $inputEndTime = $data['end_time'];
+                        foreach ($existingReservation as $reservation) {
+                            $overlap = $this->checkCarReservationOverlap($inputStartTime, $inputEndTime, $inputDate, $inputCar);
+                            if ($overlap) {
+                                return "overlap";
+                            }
                         }
+                        return CarReservation::create($data);
+                    } else {
+                        return "capacityError";
                     }
-                    return CarReservation::create($data);
                 }
             } else {
                 return "endTimeError";

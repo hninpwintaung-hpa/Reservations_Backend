@@ -120,45 +120,10 @@ class RoomReservationController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        // try {
 
-        // $validateReservation = Validator::make($request->all(), [
-        //     'user_id' => 'required',
-        //     'title' => 'required',
-        //     'description' => 'nullable',
-        //     'start_time' => 'nullable',
-        //     'end_time' => 'nullable',
-        //     'date' => 'required',
-        //     'room_id' => 'required',
-        // ]);
-
-        // if ($validateReservation->fails()) {
-        //     return $this->sendError($validateReservation->errors(), "Validation Error", 405);
-        // }
-
-        // $reservation = $this->roomReservationService->update($request->all(), $id);
-
-        // if ($reservation == "overlap") {
-        //     return $this->sendError(['overlap' => 'Reservation already exists within that time!'], "Validation Error", 405);
-        // }
-        // if ($reservation == "errorDate") {
-        //     return $this->sendError(['errorDate' => 'Please select the time greater than current time!'], "Validation Error", 405);
-        // }
-        // if ($reservation == "endTimeError") {
-        //     return $this->sendError(['endTimeError' => 'The start time must be greater than end time!'], "Validation Error", 405);
-        // }
-        // return $this->sendResponse($reservation, 'Updated Successfully');
 
         try {
-            // $input = $request->validate([
-            //     'user_id' => 'required',
-            //     'title' => 'required',
-            //     'description' => 'required',
-            //     'start_time' => 'required',
-            //     'end_time' => 'required',
-            //     'date' => 'required',
-            //     'room_id' => 'required',
-            // ]);
+
             $validateReservation = Validator::make($request->all(), [
                 'user_id' => 'required',
                 'title' => 'required',

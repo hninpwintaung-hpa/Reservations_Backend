@@ -111,7 +111,6 @@ class CarController extends BaseController
     {
         try {
             $user = Auth::user();
-            // dd($user);
 
             if (!$user->can('car-delete')) {
                 return $this->sendError('Error!', ['error' => 'You do not have permission to delete car'], 403);

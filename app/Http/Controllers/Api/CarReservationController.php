@@ -67,6 +67,9 @@ class CarReservationController extends BaseController
             if ($reservation == "endTimeError") {
                 return $this->sendError(['endTimeError' => 'The start time must be less than end time!'], "Validation Error", 405);
             }
+            if ($reservation == "capacityError") {
+                return $this->sendError(['capacityError' => 'Your passenger count is greater than the car capacity!'], "Validation Error", 405);
+            }
             return $this->sendResponse($reservation, 'Created  Reservation successfully.');
         } catch (Exception $e) {
             return $this->sendError($e->getMessage(), 'Error', 500);

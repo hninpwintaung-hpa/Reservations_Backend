@@ -29,34 +29,33 @@ class DatabaseSeeder extends Seeder
         $team1 = Team::create(
             [
                 'name' => 'Team1',
-                // 'user_id' => '1',
+
             ]
         );
         $team2 = Team::create(
             [
                 'name' => 'Team2',
-                // 'user_id' => '2',
 
             ]
         );
         $team3 = Team::create(
             [
                 'name' => 'Team3',
-                // 'user_id' => '3',
+
 
             ]
         );
         $team4 = Team::create(
             [
                 'name' => 'Team4',
-                // 'user_id' => '3',
+
 
             ]
         );
         $team5 = Team::create(
             [
                 'name' => 'Team5',
-                // 'user_id' => '3',
+
 
             ]
         );
@@ -64,7 +63,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Conference Room',
                 'capacity' => 10,
-                // 'user_id' => '3',
+
 
             ]
         );
@@ -72,7 +71,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Hall Room',
                 'capacity' => 20,
-                // 'user_id' => '3',
+
 
             ]
         );
@@ -80,7 +79,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Meeting Room 1',
                 'capacity' => 5,
-                // 'user_id' => '3',
+
 
             ]
         );
@@ -133,8 +132,6 @@ class DatabaseSeeder extends Seeder
                 'brand' => 'Honda',
                 'licence_no' => '4H-09022',
                 'capacity' => 5,
-                // 'user_id' => '3',
-
             ]
         );
         $car3 = Car::create(
@@ -142,8 +139,6 @@ class DatabaseSeeder extends Seeder
                 'brand' => 'KIA',
                 'licence_no' => '4E-59512',
                 'capacity' => 5,
-                // 'user_id' => '3',
-
             ]
         );
         $carReservation1 = CarReservation::create(
@@ -152,6 +147,7 @@ class DatabaseSeeder extends Seeder
                 'date' => '2023-05-28',
                 'start_time' => '10:0:0',
                 'end_time' => '11:0:0',
+                'no_of_traveller' => 5,
                 'destination' => 'Thingankyun',
                 'car_id' => 1,
                 'user_id' => 2,
@@ -163,6 +159,7 @@ class DatabaseSeeder extends Seeder
                 'date' => '2023-05-28',
                 'start_time' => '10:0:0',
                 'end_time' => '11:0:0',
+                'no_of_traveller' => 5,
                 'destination' => 'Kamayut',
                 'car_id' => 2,
                 'user_id' => 2,
@@ -174,6 +171,7 @@ class DatabaseSeeder extends Seeder
                 'date' => '2023-05-28',
                 'start_time' => '14:0:0',
                 'end_time' => '17:0:0',
+                'no_of_traveller' => 5,
                 'destination' => 'Latha',
                 'car_id' => 2,
                 'user_id' => 2,

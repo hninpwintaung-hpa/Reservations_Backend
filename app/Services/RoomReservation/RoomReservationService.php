@@ -68,7 +68,7 @@ class RoomReservationService implements RoomReservationServiceInterface
 
 
         if ($inputDate >= $currentDateTime || $data['start_time'] > $currentTime) {
-            // if ($data['start_time'] < $data['end_time']) {
+
             $reservations = RoomReservation::all();
             $inputStartTime = $data['start_time'];
             $inputEndTime = $data['end_time'];
