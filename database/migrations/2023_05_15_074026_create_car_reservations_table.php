@@ -24,7 +24,6 @@ return new class extends Migration
             $table->integer('status')->default(0);
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('car_id');
-            $table->string('remark')->nullable();
             $table->string('approved_by')->nullable();
             $table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

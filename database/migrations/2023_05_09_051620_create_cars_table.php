@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('brand');
             $table->string('licence_no');
             $table->integer('capacity');
-            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

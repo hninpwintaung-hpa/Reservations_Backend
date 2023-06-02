@@ -38,7 +38,7 @@ Route::patch('teams/{id}', [TeamController::class, 'update'])->middleware('auth:
 Route::delete('teams/{id}', [TeamController::class, 'destroy'])->middleware('auth:sanctum');
 
 Route::apiResource('roles', RoleController::class)->middleware('auth:sanctum');
-Route::delete('/users/user_delete/{id}', [UserController::class, 'userDelete'])
+Route::delete('/users/{id}', [UserController::class, 'userDelete'])
     ->middleware('auth:sanctum');
 
 Route::delete('/users/admin_delete/{id}', [UserController::class, 'adminDelete'])

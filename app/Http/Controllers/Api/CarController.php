@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 
-use App\Http\Requests\CarRequest;
+use Exception;
 use App\Models\Car;
+use Illuminate\Http\Request;
+use App\Http\Requests\CarRequest;
+use Illuminate\Support\Facades\Auth;
 use App\Repository\Car\CarRepository;
 use App\Services\Car\CarServiceInterface;
-use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CarController extends BaseController
@@ -49,13 +49,15 @@ class CarController extends BaseController
             if (!$user->can('car-create')) {
                 return $this->sendError('Error!', ['error' => 'You do not have permission to create new car'], 403);
             }
-            $input = $request->validate([
+            $validateCar = Validator::make($request->all(), [
                 'brand' => 'required',
                 'licence_no' => 'required|unique:cars,licence_no',
                 'capacity' => 'required',
-                'image' => 'nullable|mimes:jpeg,png,jpg',
             ]);
-            $data = $this->carService->store($input);
+            if ($validateCar->fails()) {
+                return $this->sendError($validateCar->errors(), "Validation Error", 405);
+            }
+            $data = $this->carService->store($request->all());
             return $this->sendResponse($data, 'Register successfully.');
         } catch (Exception $e) {
             return $this->sendError('Error in registration', $e->getMessage(), 500);
@@ -88,13 +90,20 @@ class CarController extends BaseController
     public function update(Request $request, $id)
     {
         try {
-            $input = $request->validate([
+            $user = Auth::user();
+
+            if (!$user->can('car-update')) {
+                return $this->sendError('Error!', ['error' => 'You do not have permission to update car'], 403);
+            }
+            $validateCar = Validator::make($request->all(), [
                 'brand' => 'required',
                 'licence_no' => 'required|unique:cars,licence_no,' . $id,
                 'capacity' => 'required',
-                'image' => 'nullable|mimes:jpeg,png,jpg',
             ]);
-            $data = $this->carService->update($input, $id);
+            if ($validateCar->fails()) {
+                return $this->sendError($validateCar->errors(), "Validation Error", 405);
+            }
+            $data = $this->carService->update($request->all(), $id);
             return $this->sendResponse($data, 'Updated successfully.');
         } catch (Exception $e) {
             return $this->sendError('Error', $e->getMessage(), 500);
@@ -111,7 +120,6 @@ class CarController extends BaseController
     {
         try {
             $user = Auth::user();
-
             if (!$user->can('car-delete')) {
                 return $this->sendError('Error!', ['error' => 'You do not have permission to delete car'], 403);
             }

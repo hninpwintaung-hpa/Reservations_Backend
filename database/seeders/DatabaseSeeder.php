@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Conference Room',
                 'capacity' => 10,
-
+                'amenities' => "Projector"
 
             ]
         );
@@ -71,7 +71,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Hall Room',
                 'capacity' => 20,
-
+                'amenities' => "Projector"
 
             ]
         );
@@ -79,7 +79,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Meeting Room 1',
                 'capacity' => 5,
-
+                'amenities' => "Projector"
 
             ]
         );

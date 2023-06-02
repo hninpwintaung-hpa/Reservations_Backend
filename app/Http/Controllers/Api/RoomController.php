@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Repository\Room\RoomRepoInterface;
-use App\Services\Room\RoomServiceInterface;
 use Exception;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Repository\Room\RoomRepoInterface;
+use App\Services\Room\RoomServiceInterface;
+use Illuminate\Support\Facades\Validator;
 
 class RoomController extends BaseController
 {
@@ -17,6 +18,7 @@ class RoomController extends BaseController
      * @return \Illuminate\Http\Response
      */
     private $roomService, $roomRepo;
+
     public function __construct(RoomServiceInterface $roomService, RoomRepoInterface $roomRepo)
     {
         $this->roomService = $roomService;
@@ -46,13 +48,16 @@ class RoomController extends BaseController
             if (!$user->can('room-create')) {
                 return $this->sendError('Error!', ['error' => 'You do not have permission to create new room'], 403);
             }
-            $input = $request->validate([
+            $validateRoom = Validator::make($request->all(), [
                 'name' => 'required',
                 'capacity' => 'required',
                 'amenities' => 'nullable',
-                'image' => 'nullable|mimes:jpeg,png,jpg',
             ]);
-            $data = $this->roomService->store($input);
+            if ($validateRoom->fails()) {
+                return $this->sendError($validateRoom->errors(), "Validation Error", 405);
+            }
+
+            $data = $this->roomService->store($request->all());
             return $this->sendResponse($data, 'Register successfully.');
         } catch (Exception $e) {
             return $this->sendError('Error in register!', $e->getMessage(), 500);
@@ -90,13 +95,17 @@ class RoomController extends BaseController
             if (!$user->can('room-update')) {
                 return $this->sendError('Error!', ['error' => 'You do not have permission to update room'], 403);
             }
-            $input = $request->validate([
+
+            $validateRoom = Validator::make($request->all(), [
                 'name' => 'required',
                 'capacity' => 'required',
                 'amenities' => 'nullable',
-                'image' => 'nullable|mimes:jpeg,png,jpg',
             ]);
-            $data = $this->roomService->update($input, $id);
+            if ($validateRoom->fails()) {
+                return $this->sendError($validateRoom->errors(), "Validation Error", 405);
+            }
+
+            $data = $this->roomService->update($request->all(), $id);
             return $this->sendResponse($data, 'Updated successfully.');
         } catch (Exception $e) {
             return $this->sendError('Error', $e->getMessage(), 500);

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\TeamRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Repository\Team\TeamRepoInterface;
 use App\Services\Team\TeamServiceInterface;
-use Exception;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class TeamController extends BaseController
 {
@@ -40,14 +41,21 @@ class TeamController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TeamRequest $request)
+    public function store(Request $request)
     {
         try {
             $user = Auth::user();
+
             if (!$user->can('team-create')) {
                 return $this->sendError('Error!', ['error' => 'You do not have permission to create new team'], 403);
             }
-            $data = $this->teamService->store($request->validated());
+            $validateTeam = Validator::make($request->all(), [
+                'name' => 'required',
+            ]);
+            if ($validateTeam->fails()) {
+                return $this->sendError($validateTeam->errors(), "Validation Error", 405);
+            }
+            $data = $this->teamService->store($request->all());
             return $this->sendResponse($data, 'Successfully register new team.');
         } catch (Exception $e) {
             return $this->sendError('Error in team registration', $e->getMessage(), 500);
