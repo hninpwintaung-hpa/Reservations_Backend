@@ -33,7 +33,7 @@ class UserService implements UserServiceInterface
     {
 
         $result = User::where('id', $id)->first();
-        $result->assignRole($data['role_id']);
+        $result->syncRoles($data['role_id']);
         if ($data['status'] == 1) {
             Mail::to($result->email)->send(new WelcomeEmail($result));
         }

@@ -3,21 +3,23 @@
 namespace App\Repository\User;
 
 use App\Models\User;
+use SebastianBergmann\CodeUnit\FunctionUnit;
 
 class UserRepository implements UserRepoInterface
 {
 
     public function get()
     {
-        $data = User::with('team')->get();
+        $data = User::with(['roles', 'team'])->get();
         return $data;
     }
 
     public function show($id)
     {
-        $data = User::where('id', $id)->first();
+        $data = User::with(['roles', 'team'])->where('id', $id)->first();
         return $data;
     }
+
     public function getProUser()
     {
 

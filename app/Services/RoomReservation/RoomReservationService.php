@@ -118,7 +118,7 @@ class RoomReservationService implements RoomReservationServiceInterface
     }
     public function checkRoomReservationOverlap($inputStartTime, $inputEndTime, $inputDate, $inputRoom)
     {
-        $overlap = RoomReservation::where('date', '=', $inputDate)->where(function ($query) use ($inputStartTime, $inputEndTime) {
+        $overlap = RoomReservation::where('room_id', $inputRoom)->where('date', '=', $inputDate)->where(function ($query) use ($inputStartTime, $inputEndTime) {
             $query->where(function ($query) use ($inputStartTime, $inputEndTime) {
                 $query->where('start_time', '>=', $inputEndTime)
                     ->where('end_time', '<=', $inputStartTime);

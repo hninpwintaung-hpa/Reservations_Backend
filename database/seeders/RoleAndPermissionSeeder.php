@@ -44,7 +44,7 @@ class RoleAndPermissionSeeder extends Seeder
 
         $carReserveApprove = Permission::create(['name' => 'car-reserve-approve']);
 
-        $superAdmin->givePermissionTo([$dashboard, $deleteAdmin, $userList, $deleteUser, $teamDelete, $teamUpdate, $teamCreate, $roomDelete, $roomUpdate, $roomCreate, $carDelete, $carUpdate, $carCreate, $carReserveApprove, $updateAdmin, $updateUser, $adminStatus, $userStatus]);
+        $superAdmin->givePermissionTo([$dashboard, $deleteAdmin, $userList, $teamDelete, $teamUpdate, $teamCreate, $roomDelete, $roomUpdate, $roomCreate, $carDelete, $carUpdate, $carCreate, $carReserveApprove, $updateAdmin, $updateUser, $adminStatus, $userStatus]);
         $admin->givePermissionTo([$dashboard, $deleteUser, $userList, $teamDelete, $teamUpdate, $teamCreate, $roomDelete, $roomUpdate, $roomCreate, $carDelete, $carUpdate, $carCreate, $carReserveApprove, $updateUser, $userStatus]);
         $staff->givePermissionTo([$dashboard]);
     }
