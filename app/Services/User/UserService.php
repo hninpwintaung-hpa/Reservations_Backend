@@ -2,6 +2,7 @@
 
 namespace App\Services\User;
 
+use App\Mail\PasswordChange;
 use App\Mail\WelcomeEmail;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -53,5 +54,14 @@ class UserService implements UserServiceInterface
 
         $data->save();
         return $data->delete();
+    }
+    public function passwordChange($data, $id)
+    {
+        $result = User::where('id', $id)->first();
+        $plainPassword = $data['password'];
+        $data['password'] = Hash::make($data['password']);
+        Mail::to($result->email)->send(new PasswordChange($result, $plainPassword));
+
+        return $result->update($data);
     }
 }

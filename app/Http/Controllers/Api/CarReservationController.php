@@ -43,8 +43,8 @@ class CarReservationController extends BaseController
         try {
             $validateReservation = Validator::make($request->all(), [
                 'title' => 'required',
-                'start_time' => 'required',
-                'end_time' => 'required',
+                'start_time' => 'required|date_format:H:i:s',
+                'end_time' => 'required|after:start_time|date_format:H:i:s',
                 'date' => 'required',
                 'destination' => 'required',
                 'no_of_traveller' => 'required',
@@ -104,8 +104,8 @@ class CarReservationController extends BaseController
         try {
             $input = $request->validate([
                 'title' => 'required',
-                'start_time' => 'required',
-                'end_time' => 'required',
+                'start_time' => 'required|date_format:H:i:s',
+                'end_time' => 'required|after:start_time|date_format:H:i:s',
                 'date' => 'required',
                 'destination' => 'required',
                 'no_of_traveller' => 'required',

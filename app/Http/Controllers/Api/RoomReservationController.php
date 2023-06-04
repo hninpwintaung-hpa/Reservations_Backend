@@ -43,6 +43,7 @@ class RoomReservationController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
         try {
@@ -50,8 +51,8 @@ class RoomReservationController extends BaseController
                 'user_id' => 'required',
                 'title' => 'required',
                 'description' => 'nullable',
-                'start_time' => 'required',
-                'end_time' => 'required',
+                'start_time' => 'required|date_format:H:i:s',
+                'end_time' => 'required|after:start_time|date_format:H:i:s',
                 'date' => 'required',
                 'room_id' => 'required',
             ]);
@@ -59,9 +60,9 @@ class RoomReservationController extends BaseController
             if ($validateReservation->fails()) {
                 return $this->sendError($validateReservation->errors(), "Validation Error", 405);
             }
-            // dd($request->all());
+
             $reservation = $this->roomReservationService->store($request->all());
-            // dd($reservation);
+
             if ($reservation == "overlap") {
                 return $this->sendError(['overlap' => 'Reservation already exists within that time!'], "Validation Error", 405);
             }
@@ -69,7 +70,7 @@ class RoomReservationController extends BaseController
                 return $this->sendError(['errorDate' => 'Please select the time greater than current time!'], "Validation Error", 405);
             }
             if ($reservation == "endTimeError") {
-                return $this->sendError(['endTimeError' => 'The start time must be greater than end time!'], "Validation Error", 405);
+                return $this->sendError(['endTimeError' => 'The end time must be a time after start time!'], "Validation Error", 405);
             }
             return $this->sendResponse($reservation, 'Created Successfully');
         } catch (Exception $e) {
@@ -128,8 +129,8 @@ class RoomReservationController extends BaseController
                 'user_id' => 'required',
                 'title' => 'required',
                 'description' => 'nullable',
-                'start_time' => 'nullable',
-                'end_time' => 'nullable|after:start_time',
+                'start_time' => 'required|date_format:H:i:s',
+                'end_time' => 'required|after:start_time|date_format:H:i:s',
                 'date' => 'required',
                 'room_id' => 'required',
             ]);

@@ -46,7 +46,7 @@ class AdminSeeder extends Seeder
                 'name' => 'staff',
                 'email' => 'staff@gmail.com',
                 'employee_id' => 'ACE-005',
-                'password' => Hash::make('user312345'),
+                'password' => Hash::make('staff12345'),
                 'phone' => '09777666777',
                 'status' => '1',
                 'team_id' => '2',

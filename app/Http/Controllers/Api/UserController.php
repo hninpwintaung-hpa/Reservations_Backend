@@ -344,4 +344,23 @@ class UserController extends Controller
             ], 500);
         }
     }
+    public function passwordChange(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'password' => 'required',
+            ]);
+            $data = $this->userService->passwordChange($request->all(), $id);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Password change successful',
+                'data' => $data
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

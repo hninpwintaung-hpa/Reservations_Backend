@@ -50,7 +50,7 @@ class TeamController extends BaseController
                 return $this->sendError('Error!', ['error' => 'You do not have permission to create new team'], 403);
             }
             $validateTeam = Validator::make($request->all(), [
-                'name' => 'required',
+                'name' => 'required|unique:teams,name',
             ]);
             if ($validateTeam->fails()) {
                 return $this->sendError($validateTeam->errors(), "Validation Error", 405);
@@ -85,15 +85,22 @@ class TeamController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(TeamRequest $request, $id)
+    public function update(Request $request, $id)
     {
         try {
+
             $user = Auth::user();
 
             if (!$user->can('team-update')) {
                 return $this->sendError('Error!', ['error' => 'You do not have permission to update team'], 403);
             }
-            $data = $this->teamService->update($request->validated(), $id);
+            $validateTeam = Validator::make($request->all(), [
+                'name' => 'required|unique:teams,name,' . $id,
+            ]);
+            if ($validateTeam->fails()) {
+                return $this->sendError($validateTeam->errors(), "Validation Error", 405);
+            }
+            $data = $this->teamService->update($request->all(), $id);
             return $this->sendResponse($data, 'Successfully updated selected team.');
         } catch (Exception $e) {
             return $this->sendError('Error!', $e->getMessage(), 500);

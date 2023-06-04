@@ -61,4 +61,5 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function () {
     Route::get('room_reserve_count_by_month', [RoomReservationController::class, 'getRoomReservationCountByMonth']);
     Route::get('car_reserve_count_by_month', [CarReservationController::class, 'getCarReservationCountByMonth']);
     Route::get('getCarReservationSearchByDate/{date}', [CarReservationController::class, 'getCarReservationSearchByDate']);
+    Route::patch('password_change/{id}', [UserController::class, 'passwordChange']);
 });

@@ -24,7 +24,7 @@ class TeamRequest extends FormRequest
     public function rules()
     {
         return [
-            'team_name' => 'required',
+            'name' => 'required',
         ];
     }
 }

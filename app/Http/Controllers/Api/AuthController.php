@@ -92,7 +92,7 @@ class AuthController extends BaseController
             if ($user['status'] == 0) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Not available! Please wait for admin approve',
+                    'message' => ['error' => 'Not available! Please wait for admin approve'],
                 ], 401);
             }
             return response()->json([
