@@ -56,6 +56,9 @@ class CarReservationController extends BaseController
                 return $this->sendError($validateReservation->errors(), "Validation Error", 405);
             }
 
+            if ($request['no_of_traveller'] <= 0) {
+                return $this->sendError(['capacityError' => 'Passengers count must be greater than 0'], "Validation Error", 405);
+            }
             $reservation = $this->carReservationService->store($request->all());
 
             if ($reservation == "overlap") {

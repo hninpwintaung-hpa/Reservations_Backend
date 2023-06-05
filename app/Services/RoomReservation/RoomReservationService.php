@@ -5,9 +5,6 @@ namespace App\Services\RoomReservation;
 use App\Models\Room;
 use App\Models\RoomReservation;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Redirect;
-
-use Illuminate\Support\Facades\Log;
 
 
 class RoomReservationService implements RoomReservationServiceInterface
@@ -26,7 +23,7 @@ class RoomReservationService implements RoomReservationServiceInterface
 
 
         if ($inputDate > $currentDateTime ||  $formattedInput >= $formattedTime) {
-            // dd($inputDate);
+
             if ($data['start_time'] < $data['end_time']) {
                 if ($data['room_id'] != null && isset($data['room_id'])) {
 

@@ -2,8 +2,12 @@
 
 namespace App\Services\CarReservation;
 
+use App\Mail\CarApprovedEmail;
 use App\Models\CarReservation;
+use App\Models\Car;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CarReservationService implements CarReservationServiceInterface
 {
@@ -17,26 +21,30 @@ class CarReservationService implements CarReservationServiceInterface
         $formattedTime = $currentTime->format('H:i:s');
         $formattedInput = $inputTime->format('H:i:s');
 
-        $car = CarReservation::with('car')->where('car_id', $data['car_id'])->get();
+        $cars = Car::get();
 
         if ($inputDate > $currentDateTime || $formattedInput >= $formattedTime) {
             if ($data['start_time'] < $data['end_time']) {
                 if ($data['car_id'] != null && isset($data['car_id'])) {
-                    if ($data['no_of_traveller'] <= $car[0]->car->capacity) {
-                        $inputCar = $data['car_id'];
+                    foreach ($cars as $car) {
+                        if ($car['id'] == $data['car_id']) {
+                            if ($data['no_of_traveller'] <= $car['capacity']) {
+                                $inputCar = $data['car_id'];
 
-                        $existingReservation = CarReservation::all();
-                        $inputStartTime = $data['start_time'];
-                        $inputEndTime = $data['end_time'];
-                        foreach ($existingReservation as $reservation) {
-                            $overlap = $this->checkCarReservationOverlap($inputStartTime, $inputEndTime, $inputDate, $inputCar);
-                            if ($overlap) {
-                                return "overlap";
+                                $existingReservation = CarReservation::all();
+                                $inputStartTime = $data['start_time'];
+                                $inputEndTime = $data['end_time'];
+                                foreach ($existingReservation as $reservation) {
+                                    $overlap = $this->checkCarReservationOverlap($inputStartTime, $inputEndTime, $inputDate, $inputCar);
+                                    if ($overlap) {
+                                        return "overlap";
+                                    }
+                                }
+                                return CarReservation::create($data);
+                            } else {
+                                return "capacityError";
                             }
                         }
-                        return CarReservation::create($data);
-                    } else {
-                        return "capacityError";
                     }
                 }
             } else {
@@ -86,28 +94,19 @@ class CarReservationService implements CarReservationServiceInterface
     }
     public function update($data, $id)
     {
-        $currentDateTime = Carbon::now();
-        $inputDate = Carbon::parse($data['date']);
+        $carReservation = CarReservation::with('user')->where('id', $id)->first();
+        $user = $carReservation->user;
 
-        if ($inputDate < $currentDateTime) {
-            return "Please select the date greater than current date.";
+        if ($data['status'] == 1) {
+            Mail::to($user->email)->send(new CarApprovedEmail($user));
         }
-        $inputCarId = $data['car_id'];
-        //$inputDate = $data['date'];
-        $existingReservation = CarReservation::where('car_id', $inputCarId)
-            ->where('date', $inputDate)
-            ->where('status', 1)
-            ->first();
-
-        if ($existingReservation) {
-            return "Unable to make reservation within this time.";
-            exit();
-        }
-        $carReservation = CarReservation::where('id', $id)->first();
         return $carReservation->update($data);
     }
+
     public function delete($id)
     {
-        return CarReservation::where('id', $id)->delete();
+        $user = Auth::user();
+        $user_id = $user['id'];
+        return CarReservation::where('id', $id)->where('user_id', $user_id)->delete();
     }
 }

@@ -1,4 +1,4 @@
-{{-- <!DOCTYPE html> --}}
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -9,10 +9,10 @@
 </head>
 
 <body>
-    <h2> Pasword Change Successful</h2>
+    <h2>Car Request Approved.</h2>
     <p>Dear, {{ $user->name }},</p>
-    <p>Your password change to '{{ $password }}'.</p>
-    <p>Thank you for using our system.</p>
+    <p>We are pleased to inform you that your car request has been approved!.</p>
+
     <br>
     <br>
 
