@@ -59,13 +59,17 @@ class RoomReservationService implements RoomReservationServiceInterface
     {
         $result = RoomReservation::where('id', $id)->first();
 
-        $inputDate = Carbon::parse($data['date']);
         $currentDateTime = Carbon::now();
-        $currentTime = Carbon::now()->toTimeString();
+        $inputDate = Carbon::parse($data['date']);
+        $inputTime = Carbon::parse($data['start_time']);
+        $currentTime = Carbon::now();
+        $currentTime->setTimezone('Asia/Yangon');
+        $formattedTime = $currentTime->format('H:i:s');
+        $formattedInput = $inputTime->format('H:i:s');
 
 
-        if ($inputDate >= $currentDateTime || $data['start_time'] > $currentTime) {
-
+        if ($inputDate > $currentDateTime ||  $formattedInput >= $formattedTime) {
+            dd('hello');
             $reservations = RoomReservation::all();
             $inputStartTime = $data['start_time'];
             $inputEndTime = $data['end_time'];

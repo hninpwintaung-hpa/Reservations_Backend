@@ -18,14 +18,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('employee_id')->unique();
-            //$table->string('NRC_no')->unique();
+            $table->string('NRC_no')->unique()->nullable();
             $table->string('phone')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->integer('status')->default(0);
             $table->foreignId('team_id');
-            // $table->unsignedBigInteger('team_id');
-            // $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            $table->integer('active')->default(1);
+            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

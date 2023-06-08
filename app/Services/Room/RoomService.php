@@ -38,6 +38,8 @@ class RoomService implements RoomServiceInterface
         if (Storage::exists('public/room_images/' . $room->image)) {
             Storage::delete('public/room_images/' . $room->image);
         }
-        return $room->delete();
+        return $room->update([
+            'status' => 0,
+        ]);
     }
 }

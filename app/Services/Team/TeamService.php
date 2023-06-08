@@ -25,15 +25,17 @@ class TeamService implements TeamServiceInterface
     {
 
         $data = Team::where('id', $id)->first();
-        $user = $data->users;
-        // $user = User::where('team_id', $data['id'])->get();
-        foreach ($user as $row) {
-            $del = $row->id;
-            $user = User::find($del)->first();
-            $user->delete();
-            // dd($user);
-        }
-        $data->delete();
+        //$user = $data->users;
+        // // $user = User::where('team_id', $data['id'])->get();
+        // foreach ($user as $row) {
+        //     $del = $row->id;
+        //     $user = User::find($del)->first();
+        //     $user->delete();
+        //     // dd($user);
+        // }
+        $data->update([
+            'status' => 0,
+        ]);
         return $data;
     }
 }

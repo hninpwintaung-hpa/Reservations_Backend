@@ -19,14 +19,15 @@ return new class extends Migration
             $table->string('title');
             $table->time('start_time');
             $table->time('end_time');
+            $table->string('source')->nullable();
             $table->string('destination');
             $table->integer('no_of_traveller')->nullable();
             $table->integer('status')->default(0);
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('car_id');
             $table->string('approved_by')->nullable();
-            $table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('car_id')->references('id')->on('cars');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

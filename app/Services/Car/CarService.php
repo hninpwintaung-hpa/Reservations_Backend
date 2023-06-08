@@ -41,6 +41,9 @@ class CarService implements CarServiceInterface
         // if (Storage::exists('public/car_images/' . $car->image)) {
         //     Storage::delete('public/car_images/' . $car->image);
         // }
-        return $car->delete();
+
+        return $car->update([
+            'status' => 0,
+        ]);
     }
 }

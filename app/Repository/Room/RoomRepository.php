@@ -8,7 +8,7 @@ class RoomRepository implements RoomRepoInterface
 {
     public function get()
     {
-        return Room::all();
+        return Room::where('status', 1)->get();
     }
     public function show($id)
     {
@@ -16,7 +16,8 @@ class RoomRepository implements RoomRepoInterface
         return $data;
     }
 
-    public function getRoomCount(){
+    public function getRoomCount()
+    {
         $data = Room::count();
         return $data;
     }

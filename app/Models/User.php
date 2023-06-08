@@ -28,6 +28,7 @@ class User extends Authenticatable
         'team_id',
         'phone',
         'employee_id',
+        'active'
     ];
 
     /**

@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id('id');
             $table->string('brand');
             $table->string('licence_no');
+            $table->string('image')->nullable();
             $table->integer('capacity');
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

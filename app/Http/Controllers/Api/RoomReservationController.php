@@ -145,9 +145,12 @@ class RoomReservationController extends BaseController
 
                 return $this->sendError(['overlap' => 'Reservation already exists within that time!'], "Validation Error", 405);
             }
-            if ($reservation == "errorDate" && $reservation == false) {
+            if ($reservation == "errorDate") {
 
                 return $this->sendError(['errorDate' => 'Please select the time greater than current time!'], "Validation Error", 405);
+            }
+            if ($reservation == "endTimeError") {
+                return $this->sendError(['endTimeError' => 'The end time must be a time after start time!'], "Validation Error", 405);
             }
 
             return $this->sendResponse($reservation, 'Updated Successfully');

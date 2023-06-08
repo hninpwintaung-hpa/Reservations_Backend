@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('capacity');
             $table->string('amenities')->nullable();
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

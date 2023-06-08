@@ -10,10 +10,11 @@ class Team extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        // 'user_id',
+        'status'
     ];
 
-    public function users(){
+    public function users()
+    {
         return $this->hasMany(User::class);
     }
 }

@@ -8,7 +8,7 @@ class CarRepository implements CarRepoInterface
 {
     public function get()
     {
-        return Car::all();
+        return Car::where('status', 1)->get();
     }
     public function show($id)
     {
