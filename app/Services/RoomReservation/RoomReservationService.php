@@ -67,9 +67,9 @@ class RoomReservationService implements RoomReservationServiceInterface
         $formattedTime = $currentTime->format('H:i:s');
         $formattedInput = $inputTime->format('H:i:s');
 
-
+        
         if ($inputDate > $currentDateTime ||  $formattedInput >= $formattedTime) {
-            dd('hello');
+
             $reservations = RoomReservation::all();
             $inputStartTime = $data['start_time'];
             $inputEndTime = $data['end_time'];
